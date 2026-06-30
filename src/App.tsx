@@ -101,6 +101,22 @@ const isMobileSafari =
 const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 const turnstileScriptSrc = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
+const screenPaths: Record<ScreenId, string> = {
+  1: '/',
+  2: '/menu',
+  3: '/informations/rituel',
+  4: '/informations/design',
+  5: '/informations/statistiques',
+  6: '/informations/repos',
+  7: '/beta',
+};
+
+function getScreenIdFromPath(pathname: string): ScreenId {
+  const matchingEntry = Object.entries(screenPaths).find(([, path]) => path === pathname);
+
+  return matchingEntry ? (Number(matchingEntry[0]) as ScreenId) : 1;
+}
+
 function App() {
   const pathname = window.location.pathname;
 
@@ -126,7 +142,7 @@ function App() {
 }
 
 function OnePager() {
-  const [currentScreenId, setCurrentScreenId] = useState<ScreenId>(1);
+  const [currentScreenId, setCurrentScreenId] = useState<ScreenId>(() => getScreenIdFromPath(window.location.pathname));
   const [shouldDelayStateContent, setShouldDelayStateContent] = useState(false);
   const [stateThreeMotion, setStateThreeMotion] = useState<'entering' | 'leaving' | null>(null);
   const [stateFourMotion, setStateFourMotion] = useState<'entering' | 'leaving' | null>(null);
@@ -315,12 +331,17 @@ function OnePager() {
       }, 10000);
     });
 
-  const goToScreen = (screenId: ScreenId) => {
+  const goToScreen = (screenId: ScreenId, options: { updateHistory?: boolean } = {}) => {
+    const shouldUpdateHistory = options.updateHistory ?? true;
     const shouldAnimateCharacterTransition =
       (currentScreenId === 1 && screenId === 2) || (currentScreenId === 2 && screenId === 1);
     const documentWithTransition = document as Document & {
       startViewTransition?: (callback: () => void) => { finished: Promise<void> };
     };
+
+    if (shouldUpdateHistory && window.location.pathname !== screenPaths[screenId]) {
+      window.history.pushState({ screenId }, '', screenPaths[screenId]);
+    }
 
     if (delayResetTimeoutRef.current !== null) {
       window.clearTimeout(delayResetTimeoutRef.current);
@@ -484,6 +505,18 @@ function OnePager() {
     setCurrentScreenId(screenId);
   };
 
+  useEffect(() => {
+    const handlePopState = () => {
+      goToScreen(getScreenIdFromPath(window.location.pathname), { updateHistory: false });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  });
+
   const openDailyMockup = () => {
     if (dailyMockupCloseTimeoutRef.current !== null) {
       window.clearTimeout(dailyMockupCloseTimeoutRef.current);
@@ -566,10 +599,12 @@ function OnePager() {
       Retour
     </button>
   );
+  const desktopNav = <DesktopNav currentScreenId={currentScreenId} goToScreen={goToScreen} />;
 
   if (currentScreenId === 1) {
     return (
       <main className="pageShell">
+        {desktopNav}
         <section className="stage introStage" aria-labelledby="intro-title">
           <div className={`introCopy${delayedContentClassName}`}>
             <h1 className="introTitle" id="intro-title">
@@ -599,6 +634,7 @@ function OnePager() {
   if (currentScreenId === 2) {
     return (
       <main className="pageShell">
+        {desktopNav}
         <section className="stage menuStage" aria-label="Choisir une presentation de Dun">
           <button
             className={`menuBackButton${delayedContentClassName}`}
@@ -644,6 +680,7 @@ function OnePager() {
   if (currentScreenId === 3) {
     return (
       <main className="pageShell">
+        {desktopNav}
         <section
           className={`stage ritualStage${isMobileSafari ? ' ritualStageSafari' : ''}`}
           aria-labelledby="ritual-title"
@@ -732,6 +769,7 @@ function OnePager() {
   if (currentScreenId === 4) {
     return (
       <main className="pageShell designPageShell">
+        {desktopNav}
         <section className="stage designStage" aria-labelledby="design-title">
           <button
             className={`menuBackButton${stateFourContentClassName}`}
@@ -782,6 +820,7 @@ function OnePager() {
   if (currentScreenId === 5) {
     return (
       <main className="pageShell designPageShell">
+        {desktopNav}
         <section className="stage statsStage" aria-labelledby="stats-title">
           <button
             className={`menuBackButton${stateFiveContentClassName}`}
@@ -846,6 +885,7 @@ function OnePager() {
   if (currentScreenId === 6) {
     return (
       <main className="pageShell designPageShell">
+        {desktopNav}
         <section className="stage restStage" aria-labelledby="rest-title">
           <button
             className={`menuBackButton${stateSixContentClassName}`}
@@ -900,6 +940,7 @@ function OnePager() {
   if (currentScreenId === 7) {
     return (
       <main className="pageShell">
+        {desktopNav}
         <section className="stage betaStage" aria-labelledby="beta-title">
           <button
             className={`menuBackButton${stateSevenContentClassName}`}
@@ -963,6 +1004,7 @@ function OnePager() {
 
   return (
     <main className="pageShell">
+      {desktopNav}
       <section className="stage" aria-labelledby="screen-title">
         <div className="screen" key={currentScreen.id}>
           <p className="eyebrow">{currentScreen.eyebrow}</p>
@@ -972,6 +1014,91 @@ function OnePager() {
         </div>
       </section>
     </main>
+  );
+}
+
+type DesktopNavProps = {
+  currentScreenId: ScreenId;
+  goToScreen: (screenId: ScreenId) => void;
+};
+
+function DesktopNav({ currentScreenId, goToScreen }: DesktopNavProps) {
+  const backTarget = currentScreenId === 2 ? 1 : 2;
+  const [isInfoMenuOpen, setIsInfoMenuOpen] = useState(false);
+  const infoMenuRef = useRef<HTMLDetailsElement | null>(null);
+
+  useEffect(() => {
+    if (!isInfoMenuOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!infoMenuRef.current?.contains(event.target as Node)) {
+        setIsInfoMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
+  }, [isInfoMenuOpen]);
+
+  const goToInfoScreen = (screenId: ScreenId) => {
+    setIsInfoMenuOpen(false);
+    goToScreen(screenId);
+  };
+
+  return (
+    <nav className="desktopNav" aria-label="Navigation principale">
+      <div className="desktopNavLeft">
+        {currentScreenId !== 1 && (
+          <button className="desktopNavBack" type="button" onClick={() => goToScreen(backTarget)} aria-label="Retour">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M15 5 8 12l7 7" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      <div className="desktopNavCenter">
+        <button className="desktopNavLink" type="button" onClick={() => goToScreen(1)}>
+          Accueil
+        </button>
+        <details
+          className="desktopNavMenu"
+          open={isInfoMenuOpen}
+          onToggle={(event) => setIsInfoMenuOpen(event.currentTarget.open)}
+          ref={infoMenuRef}
+        >
+          <summary>Informations</summary>
+          <div className="desktopNavMenuPanel">
+            <button type="button" onClick={() => goToInfoScreen(3)}>
+              Rituel
+            </button>
+            <button type="button" onClick={() => goToInfoScreen(4)}>
+              Design
+            </button>
+            <button type="button" onClick={() => goToInfoScreen(5)}>
+              Statistiques
+            </button>
+            <button type="button" onClick={() => goToInfoScreen(6)}>
+              Repos
+            </button>
+          </div>
+        </details>
+      </div>
+
+      <div className="desktopNavRight">
+        <a className="desktopNavLink" href="/support">
+          Support
+        </a>
+        <button className="desktopNavCta" type="button" onClick={() => goToScreen(7)}>
+          Rejoindre la beta
+        </button>
+      </div>
+    </nav>
   );
 }
 

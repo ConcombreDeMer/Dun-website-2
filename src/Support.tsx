@@ -305,7 +305,7 @@ export function SupportPage() {
   return (
     <main className="supportShell">
       <section className="supportStage" aria-labelledby="support-title">
-        <SupportHeader titleId="support-title" />
+        <SupportHeader titleId="support-title" showHomeLink />
 
         <div className="supportSearchRow">
           <label className="supportSearch" aria-label="Rechercher une demande">
@@ -906,9 +906,10 @@ export function IssueDetailPage({ issueId }: IssueDetailPageProps) {
 
 type SupportHeaderProps = {
   titleId?: string;
+  showHomeLink?: boolean;
 };
 
-function SupportHeader({ titleId }: SupportHeaderProps) {
+function SupportHeader({ titleId, showHomeLink = false }: SupportHeaderProps) {
   const [profile, setProfile] = useState<SupportProfile | null>(null);
 
   useEffect(() => {
@@ -937,22 +938,32 @@ function SupportHeader({ titleId }: SupportHeaderProps) {
 
   return (
     <header className="supportHeader">
-      <div>
+      {showHomeLink && (
+        <a className="supportHomeLink" href="/">
+          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <path d="M15 5 8 12l7 7" />
+          </svg>
+          <span>Retour au site</span>
+        </a>
+      )}
+      <div className="supportHeaderTitle">
         <h1 className="supportTitle" id={titleId}>
           Support
         </h1>
         <p className="supportSubtitle">Fais remonter tes demandes</p>
       </div>
-      <a
-        className={`supportLoginButton${profile ? ' supportLoginButtonConnected' : ''}`}
-        href="/login"
-        aria-label={profile ? 'Profil connecté' : 'Connexion'}
-      >
-        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-          <path d="M12 12.5c2 0 3.6-1.6 3.6-3.6S14 5.3 12 5.3 8.4 6.9 8.4 8.9s1.6 3.6 3.6 3.6Z" />
-          <path d="M5.5 20c.45-3.25 3.1-5.35 6.5-5.35s6.05 2.1 6.5 5.35H5.5Z" />
-        </svg>
-      </a>
+      <div className="supportHeaderActions">
+        <a
+          className={`supportLoginButton${profile ? ' supportLoginButtonConnected' : ''}`}
+          href="/login"
+          aria-label={profile ? 'Profil connecté' : 'Connexion'}
+        >
+          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+            <path d="M12 12.5c2 0 3.6-1.6 3.6-3.6S14 5.3 12 5.3 8.4 6.9 8.4 8.9s1.6 3.6 3.6 3.6Z" />
+            <path d="M5.5 20c.45-3.25 3.1-5.35 6.5-5.35s6.05 2.1 6.5 5.35H5.5Z" />
+          </svg>
+        </a>
+      </div>
     </header>
   );
 }
