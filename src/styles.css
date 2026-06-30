@@ -365,7 +365,14 @@ button {
   stroke-linejoin: round;
 }
 
-.betaButton {
+.menuActions {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.betaButton,
+.supportButton {
   min-width: min(58vw, 304px);
   min-height: 58px;
   display: inline-flex;
@@ -374,17 +381,701 @@ button {
   padding: 0 28px;
   border: 0;
   border-radius: 20px;
-  color: #ffffff;
-  background: linear-gradient(90deg, #555555 0%, #111111 100%);
   cursor: pointer;
   font-size: clamp(1.12rem, 4.6vw, 1.3rem);
   font-weight: 400;
   line-height: 1;
+  text-decoration: none;
 }
 
-.betaButton:focus-visible {
+.betaButton {
+  color: #ffffff;
+  background: linear-gradient(90deg, #555555 0%, #111111 100%);
+}
+
+.supportButton {
+  color: #101112;
+  background: #ffffff;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.11);
+}
+
+.betaButton:focus-visible,
+.supportButton:focus-visible {
   outline: 3px solid rgba(16, 17, 18, 0.2);
   outline-offset: 3px;
+}
+
+.supportShell {
+  width: 100%;
+  height: auto;
+  min-height: 100dvh;
+  display: grid;
+  justify-items: center;
+  overflow: visible;
+  background: #efefef;
+}
+
+.supportStage {
+  width: min(100%, 458px);
+  min-height: 100dvh;
+  margin-bottom: 300px;
+  padding: clamp(76px, 11.2dvh, 92px) 29px 44px;
+  background: #efefef;
+}
+
+.supportHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.supportTitle {
+  max-width: none;
+  margin: 0;
+  color: #000000;
+  font-size: clamp(2.45rem, 9.6vw, 3.05rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: 0;
+}
+
+.supportSubtitle {
+  margin: 8px 0 0;
+  color: #808080;
+  font-size: clamp(1.08rem, 4.2vw, 1.24rem);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.supportLoginButton,
+.supportCreateButton {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.supportLoginButton {
+  width: 55px;
+  height: 55px;
+  position: relative;
+  color: #282828;
+  background: #ffffff;
+}
+
+.supportLoginButtonConnected::after {
+  content: '';
+  width: 11px;
+  height: 11px;
+  position: absolute;
+  right: 6px;
+  bottom: 7px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #08e18b;
+}
+
+.supportLoginButton svg {
+  width: 32px;
+  height: 32px;
+}
+
+.supportLoginButton path {
+  fill: currentColor;
+}
+
+.supportSearchRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 58px;
+  gap: 14px;
+  margin-top: 49px;
+}
+
+.supportSearch {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px 0 21px;
+  border-radius: 21px;
+  background: #ffffff;
+}
+
+.supportSearch input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #555555;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.supportSearch input::placeholder {
+  color: #838383;
+  opacity: 1;
+}
+
+.supportSearch svg {
+  width: 32px;
+  height: 32px;
+  color: #8f8f8f;
+}
+
+.supportSearch circle,
+.supportSearch path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.supportCreateButton {
+  width: 58px;
+  height: 58px;
+  color: #ffffff;
+  background: #505050;
+}
+
+.supportCreateButton svg {
+  width: 31px;
+  height: 31px;
+}
+
+.supportCreateButton path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.supportSortControl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 5px;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.supportSortButton {
+  min-height: 40px;
+  border: 0;
+  border-radius: 14px;
+  color: #777777;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.supportSortButtonActive {
+  color: #ffffff;
+  background: #505050;
+}
+
+.supportSortButton:focus-visible {
+  outline: 3px solid rgba(16, 17, 18, 0.2);
+  outline-offset: 3px;
+}
+
+.supportIssueList {
+  display: grid;
+  gap: 11px;
+  margin-top: 10px;
+}
+
+.supportIssue {
+  min-height: 84px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 14px 13px 22px;
+  border-radius: 21px;
+  background: #ffffff;
+}
+
+.supportIssueLink {
+  min-width: 0;
+  color: #5f5f5f;
+  text-decoration: none;
+}
+
+.supportIssueTitle {
+  display: block;
+  overflow: hidden;
+  font-size: clamp(1rem, 3.8vw, 1.07rem);
+  font-weight: 400;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.supportLikeButton {
+  min-width: 42px;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 0;
+  border: 0;
+  color: #989898;
+  background: transparent;
+  cursor: pointer;
+}
+
+.supportLikeButton svg {
+  width: 34px;
+  height: 34px;
+}
+
+.supportLikeButton path {
+  fill: currentColor;
+}
+
+.supportLikeButton span {
+  color: #565656;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.supportLikeButtonActive {
+  color: #505050;
+}
+
+.supportLoginButton:hover,
+.supportCreateButton:hover,
+.supportIssue:hover,
+.supportLikeButton:hover {
+  transform: translateY(-1px);
+}
+
+.supportLoginButton:active,
+.supportCreateButton:active,
+.supportLikeButton:active {
+  transform: scale(0.96);
+}
+
+.supportLoginButton:focus-visible,
+.supportCreateButton:focus-visible,
+.supportIssueLink:focus-visible,
+.supportLikeButton:focus-visible,
+.supportBackLink:focus-visible,
+.supportSubmitButton:focus-visible {
+  outline: 3px solid rgba(16, 17, 18, 0.2);
+  outline-offset: 3px;
+}
+
+.supportFormStage {
+  padding-top: clamp(72px, 10.5dvh, 96px);
+}
+
+.supportBackLink {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 42px;
+  color: #777777;
+}
+
+.supportBackLink svg {
+  width: 22px;
+  height: 22px;
+}
+
+.supportBackLink path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.supportFormHeader {
+  margin-bottom: 38px;
+}
+
+.supportForm {
+  display: grid;
+  gap: 18px;
+}
+
+.supportForm label {
+  display: grid;
+  gap: 9px;
+  color: #707070;
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.supportForm input,
+.supportForm textarea {
+  width: 100%;
+  border: 0;
+  border-radius: 21px;
+  outline: 0;
+  color: #555555;
+  background: #ffffff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.supportForm input {
+  min-height: 58px;
+  padding: 0 21px;
+}
+
+.supportForm textarea {
+  min-height: 166px;
+  resize: vertical;
+  padding: 18px 21px;
+  line-height: 1.4;
+}
+
+.supportForm input::placeholder,
+.supportForm textarea::placeholder {
+  color: #9a9a9a;
+  opacity: 1;
+}
+
+.supportSubmitButton {
+  min-height: 58px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 21px;
+  color: #ffffff;
+  background: #505050;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.supportSubmitButton:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.supportProfileSummary {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 22px;
+  padding: 22px 21px;
+  border-radius: 21px;
+  background: #ffffff;
+}
+
+.supportProfileName {
+  margin: 0;
+  color: #505050;
+  font-size: 1.16rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.supportProfileEmail {
+  margin: 0;
+  color: #8a8a8a;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.supportNotice {
+  margin: 18px 0 0;
+  color: #777777;
+  font-size: 0.96rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.supportDetailStage {
+  position: relative;
+  padding-top: clamp(76px, 11.2dvh, 92px);
+  padding-bottom: 28px;
+}
+
+.supportDetailBackButton {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: max(18px, env(safe-area-inset-top));
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  opacity: 0.3;
+}
+
+.supportDetailBackButton svg {
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+}
+
+.supportDetailBackButton path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.supportDetailBackButton:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.28);
+  outline-offset: 5px;
+  border-radius: 999px;
+}
+
+.supportDetailCard {
+  min-height: min(72dvh, 740px);
+  margin-top: 53px;
+  padding: 30px 12px 39px;
+  border-radius: 21px;
+  background: #ffffff;
+}
+
+.supportDetailTop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: start;
+  gap: 14px;
+  padding: 0 10px 0 8px;
+}
+
+.supportDetailTitle {
+  margin: 4px 0 0;
+  color: #505050;
+  font-size: clamp(1.1rem, 4.5vw, 1.22rem);
+  font-weight: 900;
+  line-height: 1.18;
+}
+
+.supportDetailLikeButton {
+  margin-top: -19px;
+}
+
+.supportDetailLikeButton svg {
+  width: 35px;
+  height: 35px;
+}
+
+.supportDetailDescription {
+  margin: 16px 8px 0;
+  color: #777777;
+  font-size: clamp(0.98rem, 3.85vw, 1.06rem);
+  font-weight: 400;
+  line-height: 1.42;
+}
+
+.supportDetailMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 31px 17px 0 8px;
+  color: #a0a0a0;
+  font-size: clamp(0.95rem, 3.7vw, 1.02rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.supportDetailMeta span:first-child {
+  color: #151515;
+}
+
+.supportDetailSeparator {
+  height: 1px;
+  margin: 25px 0 0;
+  background: #9b9b9b;
+}
+
+.supportCommentList {
+  display: grid;
+  gap: 22px;
+  margin-top: 25px;
+  padding: 0 11px 0 10px;
+}
+
+.supportComment {
+  color: #8a8a8a;
+}
+
+.supportCommentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 17px;
+}
+
+.supportCommentAuthor {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #a3a3a3;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.supportCommentAvatar {
+  width: 29px;
+  height: 29px;
+  flex: 0 0 29px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #202020;
+  background: #f1f1f1;
+}
+
+.supportCommentAvatar svg {
+  width: 17px;
+  height: 17px;
+}
+
+.supportCommentAvatar path {
+  fill: currentColor;
+}
+
+.supportCommentDate {
+  flex: 0 0 auto;
+  color: #151515;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.supportComment p {
+  margin: 0;
+  color: #777777;
+  font-size: clamp(0.98rem, 3.85vw, 1.06rem);
+  font-weight: 400;
+  line-height: 1.42;
+}
+
+.supportCommentButton {
+  width: min(100%, 267px);
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto 0;
+  border: 0;
+  border-radius: 18px;
+  color: #ffffff;
+  background: linear-gradient(90deg, #555555 0%, #111111 100%);
+  cursor: pointer;
+  font-size: 1.06rem;
+  font-weight: 400;
+}
+
+.supportCommentButton:focus-visible {
+  outline: 3px solid rgba(16, 17, 18, 0.2);
+  outline-offset: 3px;
+}
+
+.supportInlineCommentForm {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.supportInlineCommentForm textarea {
+  width: 100%;
+  min-height: 118px;
+  resize: vertical;
+  padding: 18px 21px;
+  border: 0;
+  border-radius: 21px;
+  outline: 0;
+  color: #555555;
+  background: #ffffff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.supportInlineCommentForm textarea::placeholder {
+  color: #9a9a9a;
+  opacity: 1;
+}
+
+@media (min-width: 860px) {
+  .supportStage {
+    width: min(100%, 960px);
+    padding: 92px 48px 56px;
+  }
+
+  .supportHeader {
+    width: min(100%, 800px);
+    margin: 0 auto;
+  }
+
+  .supportSearchRow,
+  .supportSortControl,
+  .supportIssueList,
+  .supportForm,
+  .supportProfileSummary,
+  .supportNotice,
+  .supportDetailCard,
+  .supportInlineCommentForm {
+    width: min(100%, 800px);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .supportIssueList {
+    gap: 14px;
+  }
+
+  .supportIssue {
+    min-height: 88px;
+    padding-right: 20px;
+    padding-left: 28px;
+  }
+
+  .supportIssueTitle,
+  .supportDetailDescription,
+  .supportComment p {
+    white-space: normal;
+    font-size: 1.06rem;
+  }
+
+  .supportDetailBackButton {
+    left: calc(50% - min(480px, 50vw) + 20px);
+  }
+
+  .supportDetailCard {
+    padding: 34px 28px 42px;
+  }
+
+  .supportDetailTitle {
+    font-size: 1.28rem;
+  }
+
+  .supportCommentButton {
+    width: 267px;
+  }
 }
 
 .ritualStage {
@@ -595,6 +1286,7 @@ button {
   min-height: 100dvh;
   height: auto;
   margin: 0 auto;
+  margin-bottom: 300px;
   justify-content: flex-start;
   overflow: visible;
   padding: clamp(88px, 11dvh, 112px) 28px 22px;
@@ -667,6 +1359,7 @@ button {
   min-height: 100dvh;
   height: auto;
   margin: 0 auto;
+  margin-bottom: 300px;
   justify-content: flex-start;
   overflow: visible;
   padding: clamp(92px, 12dvh, 116px) 28px 0;
@@ -800,6 +1493,7 @@ button {
   min-height: 100dvh;
   height: auto;
   margin: 0 auto;
+  margin-bottom: 300px;
   justify-content: flex-start;
   overflow: visible;
   padding: clamp(92px, 11.6dvh, 120px) 31px 24px;

@@ -11,6 +11,7 @@ import dailyImage from './assets/daily/daily.png';
 import dailyMockupImage from './assets/daily/daily-mockup.png';
 import graphImage from './assets/stats/graph.png';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
+import { CreateIssuePage, IssueDetailPage, LoginPage, SupportPage } from './Support';
 import designMockupImage from '../assets/design-mockup.png';
 
 type ScreenId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -101,6 +102,30 @@ const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 const turnstileScriptSrc = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
 function App() {
+  const pathname = window.location.pathname;
+
+  if (pathname === '/support') {
+    return <SupportPage />;
+  }
+
+  if (pathname === '/login') {
+    return <LoginPage />;
+  }
+
+  if (pathname === '/support/create') {
+    return <CreateIssuePage />;
+  }
+
+  if (pathname.startsWith('/support/')) {
+    const issueId = decodeURIComponent(pathname.replace('/support/', ''));
+
+    return <IssueDetailPage issueId={issueId} />;
+  }
+
+  return <OnePager />;
+}
+
+function OnePager() {
   const [currentScreenId, setCurrentScreenId] = useState<ScreenId>(1);
   const [shouldDelayStateContent, setShouldDelayStateContent] = useState(false);
   const [stateThreeMotion, setStateThreeMotion] = useState<'entering' | 'leaving' | null>(null);
@@ -603,9 +628,14 @@ function App() {
             ))}
           </div>
 
-          <button className={`betaButton${delayedContentClassName}`} type="button" onClick={() => goToScreen(7)}>
-            Rejoindre la beta
-          </button>
+          <div className={`menuActions${delayedContentClassName}`}>
+            <button className="betaButton" type="button" onClick={() => goToScreen(7)}>
+              Rejoindre la beta
+            </button>
+            <a className="supportButton" href="/support">
+              Support
+            </a>
+          </div>
         </section>
       </main>
     );
