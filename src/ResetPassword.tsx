@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import resetPasswordIllustration from './assets/reset-password/7.png';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 
@@ -6,10 +6,8 @@ export function ResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSessionLoading, setIsSessionLoading] = useState(isSupabaseConfigured);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const hasTriedInitialSessionRef = useRef(false);
 
   useEffect(() => {
     document.documentElement.classList.add('designDocumentScroll');
@@ -23,7 +21,6 @@ export function ResetPasswordPage() {
 
   useEffect(() => {
     if (!supabase) {
-      setIsSessionLoading(false);
       return;
     }
 
@@ -35,10 +32,13 @@ export function ResetPasswordPage() {
       }
     });
 
-    if (!hasTriedInitialSessionRef.current) {
-      hasTriedInitialSessionRef.current = true;
-      ensureResetSession().catch((error) => {
-        setErrorMessage(createResetErrorMessage(error));
+    const code = new URLSearchParams(window.location.search).get('code');
+
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+        if (error) {
+          console.error('Erreur exchangeCodeForSession:', error.message);
+        }
       });
     }
 
@@ -52,65 +52,22 @@ export function ResetPasswordPage() {
       throw new Error("La connexion Supabase n'est pas configurée.");
     }
 
-    setIsSessionLoading(true);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
 
-    try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-      const code = searchParams.get('code') ?? hashParams.get('code');
-      const tokenHash = searchParams.get('token_hash') ?? hashParams.get('token_hash');
-      const { data: sessionData } = await supabase.auth.getSession();
-
-      if (sessionData.session) {
-        return;
-      }
-
-      if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-        if (error) {
-          throw error;
-        }
-
-        clearResetUrlParams();
-        return;
-      }
-
-      if (tokenHash) {
-        const { error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: 'recovery',
-        });
-
-        if (error) {
-          throw error;
-        }
-
-        clearResetUrlParams();
-        return;
-      }
-
-      const accessToken = hashParams.get('access_token');
-      const refreshToken = hashParams.get('refresh_token');
-
-      if (!accessToken || !refreshToken) {
-        return;
-      }
-
-      const { error } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
-
-      if (error) {
-        throw error;
-      }
-
-      clearResetUrlParams();
-    } finally {
-      setIsSessionLoading(false);
+    if (!accessToken) {
+      return;
     }
-  }
 
-  function clearResetUrlParams() {
-    window.history.replaceState(null, document.title, window.location.pathname);
+    const { error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken ?? '',
+    });
+
+    if (error) {
+      throw error;
+    }
   }
 
   function createResetErrorMessage(error: unknown) {
@@ -179,15 +136,20 @@ export function ResetPasswordPage() {
 
   return (
     <main className="resetPasswordShell">
-      <img
-        className="resetPasswordIllustration"
-        src={resetPasswordIllustration}
-        alt="Illustration de réinitialisation du mot de passe"
-      />
+      <section className="resetPasswordStage" aria-labelledby="reset-password-title">
+        <div className="resetPasswordCharacterWrap">
+          <img
+            className="resetPasswordIllustration"
+            src={resetPasswordIllustration}
+            alt="Illustration de réinitialisation du mot de passe"
+          />
+          <span className="resetPasswordShadow" aria-hidden="true" />
+        </div>
 
-      <section className="resetPasswordCard" aria-labelledby="reset-password-title">
-        <h1 id="reset-password-title">Réinitialisation du mot de passe</h1>
-        <p className="resetPasswordDescription">Veuillez entrer votre nouveau mot de passe ci-dessous.</p>
+        <header className="resetPasswordHeader">
+          <h1 id="reset-password-title">Nouveau mot de passe</h1>
+          <p className="resetPasswordDescription">Choisis un mot de passe clair, sécurisé, et on repart proprement.</p>
+        </header>
 
         {!isSupabaseConfigured ? (
           <p className="resetPasswordMessage resetPasswordMessageError">
@@ -201,7 +163,7 @@ export function ResetPasswordPage() {
             <input
               id="password"
               autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
+              disabled={!isSupabaseConfigured || isLoading}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Votre nouveau mot de passe"
               required
@@ -215,7 +177,7 @@ export function ResetPasswordPage() {
             <input
               id="confirmPassword"
               autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
+              disabled={!isSupabaseConfigured || isLoading}
               onChange={(event) => setConfirmPassword(event.target.value)}
               placeholder="Confirmez le mot de passe"
               required
@@ -238,10 +200,10 @@ export function ResetPasswordPage() {
 
           <button
             className="resetPasswordSubmit"
-            disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
+            disabled={!isSupabaseConfigured || isLoading}
             type="submit"
           >
-            {isSessionLoading ? 'Validation du lien...' : isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
+            {isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
           </button>
         </form>
       </section>

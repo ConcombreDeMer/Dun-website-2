@@ -87,89 +87,117 @@ button {
 .resetPasswordShell {
   width: 100%;
   min-height: 100dvh;
+  display: grid;
+  justify-items: center;
+  overflow: hidden;
+  background: #efefef;
+}
+
+.resetPasswordStage {
+  width: min(100%, 430px);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
-  background: #f5f5f5;
-  color: #1a1a1a;
+  padding: clamp(38px, 5.4dvh, 56px) 28px clamp(40px, 6dvh, 64px);
+  background: #efefef;
+}
+
+.resetPasswordCharacterWrap {
+  width: min(60vw, 262px);
+  display: grid;
+  justify-items: center;
+  margin: 0 auto clamp(38px, 5.8dvh, 58px);
 }
 
 .resetPasswordIllustration {
-  width: 200px;
-  max-width: 100%;
+  width: 100%;
   height: auto;
   display: block;
-  margin-bottom: 24px;
+  filter: drop-shadow(0 9px 8px rgba(0, 0, 0, 0.16));
   user-select: none;
   -webkit-user-drag: none;
 }
 
-.resetPasswordCard {
-  width: 100%;
-  max-width: 440px;
-  margin-bottom: 200px;
-  padding: 40px;
-  border: 1px solid #e8e8e8;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+.resetPasswordShadow {
+  width: 58%;
+  height: 18px;
+  display: block;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.13);
+  filter: blur(8px);
 }
 
-.resetPasswordCard h1 {
-  margin: 0 0 12px;
-  color: #1a1a1a;
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.14;
+.resetPasswordHeader {
+  text-align: center;
+}
+
+.resetPasswordHeader h1 {
+  max-width: none;
+  margin: 0;
+  color: #000000;
+  font-size: clamp(2.55rem, 10.8vw, 3.3rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: 0;
   text-align: center;
 }
 
 .resetPasswordDescription {
-  margin: 0 0 30px;
-  color: #666666;
-  font-size: 16px;
-  line-height: 1.5;
+  max-width: 330px;
+  margin: 16px auto 0;
+  color: #858585;
+  font-size: clamp(1rem, 4.1vw, 1.16rem);
+  font-weight: 400;
+  line-height: 1.36;
   text-align: center;
 }
 
 .resetPasswordForm {
+  width: calc(100% + 8px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  margin: 28px -4px 0;
 }
 
 .resetPasswordField {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 9px;
 }
 
 .resetPasswordField span {
-  color: #1a1a1a;
-  font-size: 14px;
-  font-weight: 600;
+  padding-left: 7px;
+  color: #555555;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .resetPasswordField input {
   width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  background: #fafafa;
-  color: #1a1a1a;
+  min-height: 58px;
+  padding: 0 21px;
+  border: 0;
+  border-radius: 21px;
+  outline: 0;
+  background: #ffffff;
+  color: #111111;
   font: inherit;
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.04);
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease;
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
 .resetPasswordField input:focus {
-  border-color: #1a1a1a;
-  background: #ffffff;
-  outline: none;
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.04),
+    0 0 0 3px rgba(16, 17, 18, 0.08);
 }
 
 .resetPasswordField input:disabled {
@@ -178,32 +206,34 @@ button {
 }
 
 .resetPasswordField input::placeholder {
-  color: #999999;
+  color: #8d8d8d;
+  opacity: 1;
 }
 
 .resetPasswordSubmit {
-  margin-top: 10px;
-  padding: 14px 24px;
+  min-height: 58px;
+  margin-top: 8px;
+  padding: 0 24px;
   border: 0;
-  border-radius: 12px;
-  background: #1a1a1a;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #555555 0%, #111111 100%);
   color: #ffffff;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: clamp(1.03rem, 4.2vw, 1.16rem);
+  font-weight: 700;
+  line-height: 1;
   transition:
-    background-color 180ms ease,
-    color 180ms ease,
+    filter 180ms ease,
     transform 180ms ease;
 }
 
 .resetPasswordSubmit:hover:not(:disabled) {
-  background: #333333;
-  transform: translateY(-2px);
+  filter: brightness(1.04);
+  transform: translateY(-1px);
 }
 
 .resetPasswordSubmit:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .resetPasswordSubmit:focus-visible {
@@ -212,17 +242,17 @@ button {
 }
 
 .resetPasswordSubmit:disabled {
-  background: #e0e0e0;
-  color: #999999;
+  background: #dedede;
+  color: #9a9a9a;
   cursor: not-allowed;
 }
 
 .resetPasswordMessage {
-  margin: 8px 0 0;
-  padding: 12px 16px;
-  border-radius: 10px;
+  margin: 3px 0 0;
+  padding: 14px 16px;
+  border-radius: 18px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.35;
   text-align: center;
 }
@@ -246,43 +276,6 @@ button {
   place-items: center;
   overflow: hidden;
   background: #efefef;
-}
-
-@media (max-width: 600px) {
-  .resetPasswordShell {
-    padding: 16px;
-  }
-
-  .resetPasswordIllustration {
-    width: 150px;
-    margin-bottom: 16px;
-  }
-
-  .resetPasswordCard {
-    margin-bottom: 120px;
-    padding: 24px;
-  }
-
-  .resetPasswordCard h1 {
-    margin-bottom: 8px;
-    font-size: 24px;
-  }
-
-  .resetPasswordDescription {
-    margin-bottom: 20px;
-    font-size: 14px;
-  }
-
-  .resetPasswordField input {
-    padding: 12px 14px;
-    font-size: 15px;
-  }
-
-  .resetPasswordSubmit {
-    margin-top: 5px;
-    padding: 12px 20px;
-    font-size: 15px;
-  }
 }
 
 .designPageShell {
