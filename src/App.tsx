@@ -11,6 +11,7 @@ import dailyImage from './assets/daily/daily.png';
 import dailyMockupImage from './assets/daily/daily-mockup.png';
 import graphImage from './assets/stats/graph.png';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
+import { ResetPasswordPage } from './ResetPassword';
 import { CreateIssuePage, IssueDetailPage, LoginPage, SupportPage } from './Support';
 import designMockupImage from '../assets/design-mockup.png';
 
@@ -126,6 +127,10 @@ function App() {
 
   if (pathname === '/login') {
     return <LoginPage />;
+  }
+
+  if (pathname === '/resetPassword' || pathname === '/reset-password') {
+    return <ResetPasswordPage />;
   }
 
   if (pathname === '/support/create') {
