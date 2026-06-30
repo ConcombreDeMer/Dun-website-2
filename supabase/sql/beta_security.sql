@@ -48,7 +48,7 @@ set search_path = public
 as $$
 declare
   current_attempt_count integer;
-  current_time timestamptz := now();
+  request_time timestamptz := now();
 begin
   insert into public.beta_rate_limits as limits (
     identifier,
@@ -58,23 +58,23 @@ begin
   )
   values (
     identifier_text,
-    current_time,
+    request_time,
     1,
-    current_time
+    request_time
   )
   on conflict (identifier) do update
   set
     window_start = case
-      when limits.window_start < current_time - make_interval(secs => window_seconds)
-        then current_time
+      when limits.window_start < request_time - make_interval(secs => window_seconds)
+        then request_time
       else limits.window_start
     end,
     attempt_count = case
-      when limits.window_start < current_time - make_interval(secs => window_seconds)
+      when limits.window_start < request_time - make_interval(secs => window_seconds)
         then 1
       else limits.attempt_count + 1
     end,
-    updated_at = current_time
+    updated_at = request_time
   returning attempt_count into current_attempt_count;
 
   return current_attempt_count <= max_attempts;
