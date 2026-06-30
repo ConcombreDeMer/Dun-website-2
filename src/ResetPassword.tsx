@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import resetPasswordIllustration from './assets/reset-password/7.png';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 
@@ -6,8 +6,10 @@ export function ResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSessionLoading, setIsSessionLoading] = useState(isSupabaseConfigured);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const hasTriedInitialSessionRef = useRef(false);
 
   useEffect(() => {
     document.documentElement.classList.add('designDocumentScroll');
@@ -21,6 +23,7 @@ export function ResetPasswordPage() {
 
   useEffect(() => {
     if (!supabase) {
+      setIsSessionLoading(false);
       return;
     }
 
@@ -32,13 +35,10 @@ export function ResetPasswordPage() {
       }
     });
 
-    const code = new URLSearchParams(window.location.search).get('code');
-
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
-        if (error) {
-          setErrorMessage(error.message);
-        }
+    if (!hasTriedInitialSessionRef.current) {
+      hasTriedInitialSessionRef.current = true;
+      ensureResetSession().catch((error) => {
+        setErrorMessage(createResetErrorMessage(error));
       });
     }
 
@@ -52,16 +52,90 @@ export function ResetPasswordPage() {
       throw new Error("La connexion Supabase n'est pas configurée.");
     }
 
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    const accessToken = hashParams.get('access_token');
+    setIsSessionLoading(true);
 
-    if (!accessToken) {
-      return;
+    try {
+      const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      const code = searchParams.get('code') ?? hashParams.get('code');
+      const tokenHash = searchParams.get('token_hash') ?? hashParams.get('token_hash');
+      const { data: sessionData } = await supabase.auth.getSession();
+
+      if (sessionData.session) {
+        return;
+      }
+
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+        if (error) {
+          throw error;
+        }
+
+        clearResetUrlParams();
+        return;
+      }
+
+      if (tokenHash) {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: 'recovery',
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        clearResetUrlParams();
+        return;
+      }
+
+      const accessToken = hashParams.get('access_token');
+      const refreshToken = hashParams.get('refresh_token');
+
+      if (!accessToken || !refreshToken) {
+        return;
+      }
+
+      const { error } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
+
+      if (error) {
+        throw error;
+      }
+
+      clearResetUrlParams();
+    } finally {
+      setIsSessionLoading(false);
+    }
+  }
+
+  function clearResetUrlParams() {
+    window.history.replaceState(null, document.title, window.location.pathname);
+  }
+
+  function createResetErrorMessage(error: unknown) {
+    const message = error instanceof Error ? error.message : '';
+
+    if (message.includes('invalid JWT') || message.includes('token') || message.includes('expired')) {
+      return 'Le lien de réinitialisation est invalide ou a expiré. Demandez un nouveau lien depuis l’application.';
     }
 
-    const { error } = await supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: hashParams.get('refresh_token') ?? '',
+    return message || 'Le lien de réinitialisation n’a pas pu être validé.';
+  }
+
+  async function updatePassword() {
+    if (!supabase) {
+      throw new Error("La connexion Supabase n'est pas configurée.");
+    }
+
+    const { data } = await supabase.auth.getSession();
+
+    if (!data.session) {
+      throw new Error('RESET_SESSION_MISSING');
+    }
+
+    const { error } = await supabase.auth.updateUser({
+      password,
     });
 
     if (error) {
@@ -83,14 +157,7 @@ export function ResetPasswordPage() {
 
     try {
       await ensureResetSession();
-
-      const { error } = await supabase!.auth.updateUser({
-        password,
-      });
-
-      if (error) {
-        throw error;
-      }
+      await updatePassword();
 
       setSuccessMessage('Votre mot de passe a été réinitialisé avec succès !');
       setPassword('');
@@ -100,7 +167,11 @@ export function ResetPasswordPage() {
         window.location.assign('/');
       }, 2500);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Une erreur inattendue est survenue.');
+      if (error instanceof Error && error.message === 'RESET_SESSION_MISSING') {
+        setErrorMessage('Le lien de réinitialisation est invalide ou a expiré. Demandez un nouveau lien depuis l’application.');
+      } else {
+        setErrorMessage(createResetErrorMessage(error));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +201,7 @@ export function ResetPasswordPage() {
             <input
               id="password"
               autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isLoading}
+              disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Votre nouveau mot de passe"
               required
@@ -144,7 +215,7 @@ export function ResetPasswordPage() {
             <input
               id="confirmPassword"
               autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isLoading}
+              disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
               onChange={(event) => setConfirmPassword(event.target.value)}
               placeholder="Confirmez le mot de passe"
               required
@@ -165,8 +236,12 @@ export function ResetPasswordPage() {
             </p>
           ) : null}
 
-          <button className="resetPasswordSubmit" disabled={!isSupabaseConfigured || isLoading} type="submit">
-            {isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
+          <button
+            className="resetPasswordSubmit"
+            disabled={!isSupabaseConfigured || isSessionLoading || isLoading}
+            type="submit"
+          >
+            {isSessionLoading ? 'Validation du lien...' : isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
           </button>
         </form>
       </section>
