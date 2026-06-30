@@ -111,8 +111,9 @@ button {
 }
 
 .resetPasswordIllustration {
-  width: 100%;
+  width: 75%;
   height: auto;
+  max-width: 400px;
   display: block;
   filter: drop-shadow(0 9px 8px rgba(0, 0, 0, 0.16));
   user-select: none;

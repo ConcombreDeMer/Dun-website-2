@@ -147,7 +147,13 @@ export function ResetPasswordPage() {
         </div>
 
         <header className="resetPasswordHeader">
-          <h1 id="reset-password-title">Nouveau mot de passe</h1>
+          <h1 style={{
+            fontSize : '2rem',
+            textAlign : 'center',
+          }} 
+          id="reset-password-title"
+          >Nouveau mot de passe
+          </h1>
           <p className="resetPasswordDescription">Choisis un mot de passe clair, sécurisé, et on repart proprement.</p>
         </header>
 
