@@ -10,6 +10,10 @@ import characterShadow from './assets/character/0.png';
 import dailyImage from './assets/daily/daily.png';
 import dailyMockupImage from './assets/daily/daily-mockup.png';
 import graphImage from './assets/stats/graph.png';
+import { SiteFooter } from './components/SiteFooter';
+import { PrivacyPolicyPage } from './legal/PrivacyPolicyPage';
+import { SubscriptionTermsPage } from './legal/SubscriptionTermsPage';
+import { TermsOfUsePage } from './legal/TermsOfUsePage';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { ResetPasswordPage } from './ResetPassword';
 import { CreateIssuePage, IssueDetailPage, LoginPage, SupportPage } from './Support';
@@ -141,6 +145,18 @@ function App() {
     const issueId = decodeURIComponent(pathname.replace('/support/', ''));
 
     return <IssueDetailPage issueId={issueId} />;
+  }
+
+  if (pathname === '/terms-of-use') {
+    return <TermsOfUsePage />;
+  }
+
+  if (pathname === '/subscription-terms') {
+    return <SubscriptionTermsPage />;
+  }
+
+  if (pathname === '/privacy-policy') {
+    return <PrivacyPolicyPage />;
   }
 
   return <OnePager />;
@@ -632,6 +648,7 @@ function OnePager() {
             <span>Cliques sur Dun</span>
           </div>
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -678,6 +695,7 @@ function OnePager() {
             </a>
           </div>
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -767,6 +785,7 @@ function OnePager() {
             </div>
           )}
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -818,6 +837,7 @@ function OnePager() {
             </section>
           </div>
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -883,6 +903,7 @@ function OnePager() {
             <img className="statsGraphCard" src={graphImage} alt="Graphique de statistiques Dun" />
           </div>
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -938,6 +959,7 @@ function OnePager() {
             </section>
           </div>
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -1003,6 +1025,7 @@ function OnePager() {
             </div>
           )}
         </section>
+        <SiteFooter />
       </main>
     );
   }
@@ -1018,6 +1041,7 @@ function OnePager() {
           <div className="actions">{navigation}</div>
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }
