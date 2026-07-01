@@ -161,14 +161,35 @@ function renderLegalMarkdown(markdown: string) {
       !lines[index].trim().startsWith('- ') &&
       !lines[index].trim().startsWith('|')
     ) {
-      paragraphLines.push(lines[index].trim());
+      paragraphLines.push(lines[index]);
       index += 1;
     }
 
-    blocks.push(<p key={index}>{renderInlineMarkdown(paragraphLines.join(' '))}</p>);
+    blocks.push(<p key={index}>{renderParagraphMarkdown(paragraphLines)}</p>);
   }
 
   return blocks;
+}
+
+function renderParagraphMarkdown(lines: string[]) {
+  const nodes: ReactNode[] = [];
+
+  lines.forEach((line, lineIndex) => {
+    const hasHardBreak = / {2,}$/.test(line);
+    const text = line.trim();
+
+    if (lineIndex > 0 && !/ {2,}$/.test(lines[lineIndex - 1])) {
+      nodes.push(' ');
+    }
+
+    nodes.push(...renderInlineMarkdown(text));
+
+    if (hasHardBreak && lineIndex < lines.length - 1) {
+      nodes.push(<br key={`break-${lineIndex}`} />);
+    }
+  });
+
+  return nodes;
 }
 
 function renderInlineMarkdown(text: string) {

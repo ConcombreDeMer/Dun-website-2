@@ -88,14 +88,10 @@ En cas d’arrêt définitif de l’offre ou de l’Application, Nay Studio s’
 
 La gestion de l’abonnement peut impliquer le traitement de certaines données, notamment l’identifiant utilisateur, le statut d’abonnement, le produit acheté et les dates d’achat ou d’expiration.
 
-Ces traitements sont décrits dans la Politique de confidentialité de Dun.
-
-Politique de confidentialité : [LIEN VERS LA POLITIQUE DE CONFIDENTIALITÉ]
+Ces traitements sont décrits dans la [Politique de confidentialité de Dun](/privacy-policy).
 
 ## 12. Conditions applicables
 
-Les présentes conditions complètent les Conditions Générales d’Utilisation de Dun.
+Les présentes conditions complètent les [Conditions Générales d’Utilisation de Dun](/terms-of-use).
 
 L’utilisation de Dun et de Dun Plus est également soumise aux conditions applicables de l’App Store et du compte Apple de l’utilisateur.
-
-Conditions Générales d’Utilisation : [LIEN VERS LES CGU]

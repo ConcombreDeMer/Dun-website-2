@@ -132,7 +132,7 @@ Après l’arrêt du service, les données associées aux comptes utilisateurs p
 
 L’utilisateur peut supprimer son compte depuis l’Application lorsque cette fonctionnalité est disponible.
 
-La suppression du compte entraîne la suppression des principales données associées au compte, selon les modalités décrites dans la Politique de confidentialité.
+La suppression du compte entraîne la suppression des principales données associées au compte, selon les modalités décrites dans la [Politique de confidentialité de Dun](/privacy-policy).
 
 La suppression du compte ne résilie pas automatiquement un abonnement Apple actif. L’utilisateur doit gérer ou annuler son abonnement séparément depuis son compte Apple.
 
@@ -140,9 +140,7 @@ La suppression du compte ne résilie pas automatiquement un abonnement Apple act
 
 L’utilisation de Dun implique le traitement de données personnelles.
 
-Les modalités de collecte, d’utilisation, de conservation et de suppression des données personnelles sont décrites dans la Politique de confidentialité de Dun.
-
-La Politique de confidentialité est accessible à l’adresse suivante : [LIEN VERS LA POLITIQUE DE CONFIDENTIALITÉ].
+Les modalités de collecte, d’utilisation, de conservation et de suppression des données personnelles sont décrites dans la [Politique de confidentialité de Dun](/privacy-policy).
 
 ## 16. Propriété intellectuelle
 

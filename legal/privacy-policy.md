@@ -115,6 +115,8 @@ Si vous vous inscrivez à une liste bêta ou d’attente, nous pouvons collecter
 
 Ces données servent à gérer la liste bêta, éviter les inscriptions abusives et protéger le service.
 
+Vous pouvez consulter le Privacy Addendum de Cloudflare Turnstile [ici](https://www.cloudflare.com/en-gb/turnstile-privacy-policy/).
+
 ### 2.8 Données techniques
 
 Lors de l’utilisation de l’Application, certains prestataires techniques peuvent traiter automatiquement des données nécessaires au fonctionnement du service, notamment :
@@ -293,4 +295,4 @@ Vous pouvez également introduire une réclamation auprès de la CNIL :
 Commission Nationale de l’Informatique et des Libertés  
 3 Place de Fontenoy - TSA 80715  
 75334 Paris Cedex 07  
-Site web : https://www.cnil.fr
+Vous pouvez consulter le site de la CNIL [ici](https://www.cnil.fr).
