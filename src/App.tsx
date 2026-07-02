@@ -11,6 +11,7 @@ import dailyImage from './assets/daily/daily.png';
 import dailyMockupImage from './assets/daily/daily-mockup.png';
 import graphImage from './assets/stats/graph.png';
 import { SiteFooter } from './components/SiteFooter';
+import { SquircleBox } from './components/SquircleBox';
 import { PrivacyPolicyPage } from './legal/PrivacyPolicyPage';
 import { SubscriptionTermsPage } from './legal/SubscriptionTermsPage';
 import { TermsOfUsePage } from './legal/TermsOfUsePage';
@@ -675,24 +676,30 @@ function OnePager() {
 
           <div className={`taskList${delayedContentClassName}`} aria-label="Parcours disponibles">
             {menuTasks.map((task) => (
-              <button className="taskButton" key={task.id} onClick={() => goToScreen(task.id)}>
-                <span className="taskText">{task.text}</span>
-                <span className="taskCheckbox" aria-hidden="true">
-                  <svg className="taskCheckIcon" viewBox="0 0 24 24" focusable="false">
-                    <path d="M5 12.5 10 17.5 19.5 6.5" />
-                  </svg>
-                </span>
-              </button>
+              <SquircleBox asChild cornerRadius={20} key={task.id}>
+                <button className="taskButton" onClick={() => goToScreen(task.id)}>
+                  <span className="taskText">{task.text}</span>
+                  <span className="taskCheckbox" aria-hidden="true">
+                    <svg className="taskCheckIcon" viewBox="0 0 24 24" focusable="false">
+                      <path d="M5 12.5 10 17.5 19.5 6.5" />
+                    </svg>
+                  </span>
+                </button>
+              </SquircleBox>
             ))}
           </div>
 
           <div className={`menuActions${delayedContentClassName}`}>
-            <button className="betaButton" type="button" onClick={() => goToScreen(7)}>
-              Rejoindre la beta
-            </button>
-            <a className="supportButton" href="/support">
-              Support
-            </a>
+            <SquircleBox asChild cornerRadius={20}>
+              <button className="betaButton" type="button" onClick={() => goToScreen(7)}>
+                Rejoindre la beta
+              </button>
+            </SquircleBox>
+            <SquircleBox asChild cornerRadius={20}>
+              <a className="supportButton" href="/support">
+                Support
+              </a>
+            </SquircleBox>
           </div>
         </section>
         <SiteFooter />
@@ -736,7 +743,8 @@ function OnePager() {
               </p>
             </header>
 
-            <section className="ritualCard" aria-label="Les trois étapes du rituel">
+            <SquircleBox asChild cornerRadius={28}>
+              <section className="ritualCard" aria-label="Les trois étapes du rituel">
               {ritualSteps.map((step) => (
                 <article className="ritualStep" key={step.index}>
                   <div>
@@ -746,12 +754,15 @@ function OnePager() {
                   <span>{step.index}</span>
                 </article>
               ))}
-            </section>
+              </section>
+            </SquircleBox>
 
             <div className="ritualShowcase">
-              <div className="dailyBox">
-                <img src={dailyImage} alt="" />
-              </div>
+              <SquircleBox asChild cornerRadius={20}>
+                <div className="dailyBox">
+                  <img src={dailyImage} alt="" />
+                </div>
+              </SquircleBox>
               <button
                 className="dailyMockupButton"
                 onClick={openDailyMockup}
@@ -813,13 +824,15 @@ function OnePager() {
               <p className="designSubtitle">calme, directe et fluide</p>
             </header>
 
-            <section className="designCard designCardTop">
-              <h2>Une interface qui laisse respirer.</h2>
-              <p>
-                Dun va droit à l’essentiel : ta journée, tes tâches, ton rythme. L’interface évite
-                le bruit visuel pour que chaque action reste claire, rapide et naturelle.
-              </p>
-            </section>
+            <SquircleBox asChild cornerRadius={24}>
+              <section className="designCard designCardTop">
+                <h2>Une interface qui laisse respirer.</h2>
+                <p>
+                  Dun va droit à l’essentiel : ta journée, tes tâches, ton rythme. L’interface évite
+                  le bruit visuel pour que chaque action reste claire, rapide et naturelle.
+                </p>
+              </section>
+            </SquircleBox>
 
             <img
               className="designMockup"
@@ -827,14 +840,16 @@ function OnePager() {
               alt="Mockups de l'interface Dun"
             />
 
-            <section className="designCard designCardBottom">
-              <h2>Dun se place entre la todo list minimaliste et l’outil de productivité ultra complexe.</h2>
-              <p>
-                L’app donne juste assez de structure pour organiser ses journées, suivre son rythme
-                et personnaliser son espace, sans imposer une méthode unique. Chacun peut y
-                construire son propre système, avec une interface qui reste claire, calme et directe.
-              </p>
-            </section>
+            <SquircleBox asChild cornerRadius={24}>
+              <section className="designCard designCardBottom">
+                <h2>Dun se place entre la todo list minimaliste et l’outil de productivité ultra complexe.</h2>
+                <p>
+                  L’app donne juste assez de structure pour organiser ses journées, suivre son rythme
+                  et personnaliser son espace, sans imposer une méthode unique. Chacun peut y
+                  construire son propre système, avec une interface qui reste claire, calme et directe.
+                </p>
+              </section>
+            </SquircleBox>
           </div>
         </section>
         <SiteFooter />
@@ -936,27 +951,31 @@ function OnePager() {
               <img className="restShadow" src={characterShadow} alt="" />
             </div>
 
-            <section className="restCard restCardSmall">
-              <p>
-                Le mode repos met la journée <strong>entre parenthèses</strong>, <strong>reporte</strong> ce qui doit l’être,
-                et rappelle qu’avancer demande aussi de <strong>respirer</strong>.
-              </p>
-            </section>
+            <SquircleBox asChild cornerRadius={22}>
+              <section className="restCard restCardSmall">
+                <p>
+                  Le mode repos met la journée <strong>entre parenthèses</strong>, <strong>reporte</strong> ce qui doit l’être,
+                  et rappelle qu’avancer demande aussi de <strong>respirer</strong>.
+                </p>
+              </section>
+            </SquircleBox>
 
-            <section className="restCard restCardLarge">
-              <div className="restMoon" aria-hidden="true" />
-              <p>
-                Le repos <strong>fait partie du rythme.</strong>
-              </p>
-              <p>
-                Dun n’est pas là pour te pousser à cocher des cases coûte que coûte. Certaines
-                journées servent à <strong>récupérer</strong>, à <strong>ralentir</strong>, ou simplement à <strong>ne rien porter de plus</strong>.
-              </p>
-              <p>
-                Le mode repos existe pour que tu puisses faire une pause <strong>sans culpabilité</strong>,
-                sans casser ton suivi, et revenir quand tu es prêt.
-              </p>
-            </section>
+            <SquircleBox asChild cornerRadius={22}>
+              <section className="restCard restCardLarge">
+                <div className="restMoon" aria-hidden="true" />
+                <p>
+                  Le repos <strong>fait partie du rythme.</strong>
+                </p>
+                <p>
+                  Dun n’est pas là pour te pousser à cocher des cases coûte que coûte. Certaines
+                  journées servent à <strong>récupérer</strong>, à <strong>ralentir</strong>, ou simplement à <strong>ne rien porter de plus</strong>.
+                </p>
+                <p>
+                  Le mode repos existe pour que tu puisses faire une pause <strong>sans culpabilité</strong>,
+                  sans casser ton suivi, et revenir quand tu es prêt.
+                </p>
+              </section>
+            </SquircleBox>
           </div>
         </section>
         <SiteFooter />
@@ -1000,29 +1019,33 @@ function OnePager() {
               </p>
             </header>
 
-            <form className="betaForm" onSubmit={handleBetaSubmit} noValidate>
-              <input
-                className="betaInput"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                placeholder="ton@email.com"
-                value={betaEmail}
-                onChange={(event) => setBetaEmail(event.target.value)}
-                disabled={isBetaSubmitting}
-                aria-label="Adresse email"
-              />
-              <button className="betaSubmitButton" type="submit" disabled={isBetaSubmitting}>
-                {isBetaSubmitting ? 'Envoi...' : 'Me prévenir'}
-              </button>
-              <div className="turnstileWidget" ref={turnstileContainerRef} aria-hidden="true" />
-            </form>
+            <SquircleBox asChild cornerRadius={999}>
+              <form className="betaForm" onSubmit={handleBetaSubmit} noValidate>
+                <input
+                  className="betaInput"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  placeholder="ton@email.com"
+                  value={betaEmail}
+                  onChange={(event) => setBetaEmail(event.target.value)}
+                  disabled={isBetaSubmitting}
+                  aria-label="Adresse email"
+                />
+                <button className="betaSubmitButton" type="submit" disabled={isBetaSubmitting}>
+                  {isBetaSubmitting ? 'Envoi...' : 'Me prévenir'}
+                </button>
+                <div className="turnstileWidget" ref={turnstileContainerRef} aria-hidden="true" />
+              </form>
+            </SquircleBox>
           </div>
 
           {betaToast && (
-            <div className={`betaToast betaToast${betaToast.type === 'success' ? 'Success' : 'Error'}`} role="status">
-              {betaToast.message}
-            </div>
+            <SquircleBox asChild cornerRadius={18}>
+              <div className={`betaToast betaToast${betaToast.type === 'success' ? 'Success' : 'Error'}`} role="status">
+                {betaToast.message}
+              </div>
+            </SquircleBox>
           )}
         </section>
         <SiteFooter />
@@ -1102,20 +1125,30 @@ function DesktopNav({ currentScreenId, goToScreen }: DesktopNavProps) {
           ref={infoMenuRef}
         >
           <summary>Informations</summary>
-          <div className="desktopNavMenuPanel">
-            <button type="button" onClick={() => goToInfoScreen(3)}>
-              Rituel
-            </button>
-            <button type="button" onClick={() => goToInfoScreen(4)}>
-              Design
-            </button>
-            <button type="button" onClick={() => goToInfoScreen(5)}>
-              Statistiques
-            </button>
-            <button type="button" onClick={() => goToInfoScreen(6)}>
-              Repos
-            </button>
-          </div>
+          <SquircleBox asChild cornerRadius={18}>
+            <div className="desktopNavMenuPanel">
+              <SquircleBox asChild cornerRadius={12}>
+                <button type="button" onClick={() => goToInfoScreen(3)}>
+                  Rituel
+                </button>
+              </SquircleBox>
+              <SquircleBox asChild cornerRadius={12}>
+                <button type="button" onClick={() => goToInfoScreen(4)}>
+                  Design
+                </button>
+              </SquircleBox>
+              <SquircleBox asChild cornerRadius={12}>
+                <button type="button" onClick={() => goToInfoScreen(5)}>
+                  Statistiques
+                </button>
+              </SquircleBox>
+              <SquircleBox asChild cornerRadius={12}>
+                <button type="button" onClick={() => goToInfoScreen(6)}>
+                  Repos
+                </button>
+              </SquircleBox>
+            </div>
+          </SquircleBox>
         </details>
       </div>
 
@@ -1123,9 +1156,11 @@ function DesktopNav({ currentScreenId, goToScreen }: DesktopNavProps) {
         <a className="desktopNavLink" href="/support">
           Support
         </a>
-        <button className="desktopNavCta" type="button" onClick={() => goToScreen(7)}>
-          Rejoindre la beta
-        </button>
+        <SquircleBox asChild cornerRadius={14}>
+          <button className="desktopNavCta" type="button" onClick={() => goToScreen(7)}>
+            Rejoindre la beta
+          </button>
+        </SquircleBox>
       </div>
     </nav>
   );

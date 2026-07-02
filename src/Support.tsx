@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { SquircleBox } from './components/SquircleBox';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 import { getSupportIssueById, supportIssues as mockSupportIssues, type SupportComment } from './supportMocks';
 
@@ -308,18 +309,20 @@ export function SupportPage() {
         <SupportHeader titleId="support-title" showHomeLink />
 
         <div className="supportSearchRow">
-          <label className="supportSearch" aria-label="Rechercher une demande">
-            <input
-              type="search"
-              placeholder="Rechercher une demande"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-            />
-            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-              <circle cx="10.8" cy="10.8" r="6.6" />
-              <path d="m16 16 5 5" />
-            </svg>
-          </label>
+          <SquircleBox asChild cornerRadius={21}>
+            <label className="supportSearch" aria-label="Rechercher une demande">
+              <input
+                type="search"
+                placeholder="Rechercher une demande"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <circle cx="10.8" cy="10.8" r="6.6" />
+                <path d="m16 16 5 5" />
+              </svg>
+            </label>
+          </SquircleBox>
           <a className="supportCreateButton" href="/support/create" aria-label="Créer une demande">
             <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
               <path d="M12 5v14M5 12h14" />
@@ -327,44 +330,52 @@ export function SupportPage() {
           </a>
         </div>
 
-        <div className="supportSortControl" aria-label="Trier les demandes">
-          <button
-            className={sortMode === 'recent' ? 'supportSortButton supportSortButtonActive' : 'supportSortButton'}
-            type="button"
-            onClick={() => setSortMode('recent')}
-          >
-            Récentes
-          </button>
-          <button
-            className={sortMode === 'popular' ? 'supportSortButton supportSortButtonActive' : 'supportSortButton'}
-            type="button"
-            onClick={() => setSortMode('popular')}
-          >
-            Populaires
-          </button>
-        </div>
+        <SquircleBox asChild cornerRadius={18}>
+          <div className="supportSortControl" aria-label="Trier les demandes">
+            <SquircleBox asChild cornerRadius={14}>
+              <button
+                className={sortMode === 'recent' ? 'supportSortButton supportSortButtonActive' : 'supportSortButton'}
+                type="button"
+                onClick={() => setSortMode('recent')}
+              >
+                Récentes
+              </button>
+            </SquircleBox>
+            <SquircleBox asChild cornerRadius={14}>
+              <button
+                className={sortMode === 'popular' ? 'supportSortButton supportSortButtonActive' : 'supportSortButton'}
+                type="button"
+                onClick={() => setSortMode('popular')}
+              >
+                Populaires
+              </button>
+            </SquircleBox>
+          </div>
+        </SquircleBox>
 
         {errorMessage && <p className="supportNotice">{errorMessage}</p>}
         {isLoading && <p className="supportNotice">Chargement des demandes...</p>}
 
         <div className="supportIssueList" aria-label="Demandes populaires">
           {filteredAndSortedIssues.map((issue) => (
-            <article className="supportIssue" key={issue.id}>
-              <a className="supportIssueLink" href={`/support/${issue.slug || issue.id}`}>
-                <span className="supportIssueTitle">{issue.title}</span>
-              </a>
-              <button
-                className={`supportLikeButton${issue.hasCurrentUserVote ? ' supportLikeButtonActive' : ''}`}
-                type="button"
-                aria-label={`${issue.likes} likes`}
-                onClick={() => toggleVote(issue)}
-              >
-                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                  <path d="M12 21S4.2 16.45 4.2 9.8A4.35 4.35 0 0 1 12 7.15 4.35 4.35 0 0 1 19.8 9.8C19.8 16.45 12 21 12 21Z" />
-                </svg>
-                <span>{issue.likes}</span>
-              </button>
-            </article>
+            <SquircleBox asChild cornerRadius={21} key={issue.id}>
+              <article className="supportIssue">
+                <a className="supportIssueLink" href={`/support/${issue.slug || issue.id}`}>
+                  <span className="supportIssueTitle">{issue.title}</span>
+                </a>
+                <button
+                  className={`supportLikeButton${issue.hasCurrentUserVote ? ' supportLikeButtonActive' : ''}`}
+                  type="button"
+                  aria-label={`${issue.likes} likes`}
+                  onClick={() => toggleVote(issue)}
+                >
+                  <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                    <path d="M12 21S4.2 16.45 4.2 9.8A4.35 4.35 0 0 1 12 7.15 4.35 4.35 0 0 1 19.8 9.8C19.8 16.45 12 21 12 21Z" />
+                  </svg>
+                  <span>{issue.likes}</span>
+                </button>
+              </article>
+            </SquircleBox>
           ))}
         </div>
       </section>
@@ -466,13 +477,17 @@ export function LoginPage() {
             </h1>
             <p className="supportSubtitle">Tu es connecté</p>
           </header>
-          <div className="supportProfileSummary">
-            <p className="supportProfileName">{profile.name}</p>
-            <p className="supportProfileEmail">{profile.email}</p>
-          </div>
-          <button className="supportSubmitButton" type="button" onClick={handleSignOut}>
-            Se déconnecter
-          </button>
+          <SquircleBox asChild cornerRadius={21}>
+            <div className="supportProfileSummary">
+              <p className="supportProfileName">{profile.name}</p>
+              <p className="supportProfileEmail">{profile.email}</p>
+            </div>
+          </SquircleBox>
+          <SquircleBox asChild cornerRadius={21}>
+            <button className="supportSubmitButton" type="button" onClick={handleSignOut}>
+              Se déconnecter
+            </button>
+          </SquircleBox>
           {message && <p className="supportNotice">{message}</p>}
         </section>
       </main>
@@ -492,27 +507,33 @@ export function LoginPage() {
         <form className="supportForm" onSubmit={handleSubmit}>
           <label>
             Email
-            <input
-              type="email"
-              placeholder="ton@email.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <input
+                type="email"
+                placeholder="ton@email.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </SquircleBox>
           </label>
           <label>
             Mot de passe
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </SquircleBox>
           </label>
-          <button className="supportSubmitButton" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Connexion...' : 'Se connecter'}
-          </button>
+          <SquircleBox asChild cornerRadius={21}>
+            <button className="supportSubmitButton" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Connexion...' : 'Se connecter'}
+            </button>
+          </SquircleBox>
           {message && <p className="supportNotice">{message}</p>}
         </form>
       </section>
@@ -589,27 +610,33 @@ export function CreateIssuePage() {
         <form className="supportForm" onSubmit={handleSubmit}>
           <label>
             Titre
-            <input
-              type="text"
-              placeholder="Titre de la demande"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              required
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <input
+                type="text"
+                placeholder="Titre de la demande"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                required
+              />
+            </SquircleBox>
           </label>
           <label>
             Description
-            <textarea
-              placeholder="Ajoute quelques détails"
-              rows={6}
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              required
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <textarea
+                placeholder="Ajoute quelques détails"
+                rows={6}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                required
+              />
+            </SquircleBox>
           </label>
-          <button className="supportSubmitButton" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Création...' : 'Créer la demande'}
-          </button>
+          <SquircleBox asChild cornerRadius={21}>
+            <button className="supportSubmitButton" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Création...' : 'Créer la demande'}
+            </button>
+          </SquircleBox>
           {message && <p className="supportNotice">{message}</p>}
         </form>
       </section>
@@ -830,74 +857,82 @@ export function IssueDetailPage({ issueId }: IssueDetailPageProps) {
 
         <SupportHeader />
 
-        <article className="supportDetailCard">
-          <div className="supportDetailTop">
-            <h2 className="supportDetailTitle" id="issue-detail-title">
-              {issue.title}
-            </h2>
-            <button
-              className={`supportLikeButton supportDetailLikeButton${
-                issue.hasCurrentUserVote ? ' supportLikeButtonActive' : ''
-              }`}
-              type="button"
-              aria-label={`${issue.likes} likes`}
-              onClick={toggleIssueVote}
-            >
-              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-                <path d="M12 21S4.2 16.45 4.2 9.8A4.35 4.35 0 0 1 12 7.15 4.35 4.35 0 0 1 19.8 9.8C19.8 16.45 12 21 12 21Z" />
-              </svg>
-              <span>{issue.likes}</span>
-            </button>
-          </div>
+        <SquircleBox asChild cornerRadius={21}>
+          <article className="supportDetailCard">
+            <div className="supportDetailTop">
+              <h2 className="supportDetailTitle" id="issue-detail-title">
+                {issue.title}
+              </h2>
+              <button
+                className={`supportLikeButton supportDetailLikeButton${
+                  issue.hasCurrentUserVote ? ' supportLikeButtonActive' : ''
+                }`}
+                type="button"
+                aria-label={`${issue.likes} likes`}
+                onClick={toggleIssueVote}
+              >
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <path d="M12 21S4.2 16.45 4.2 9.8A4.35 4.35 0 0 1 12 7.15 4.35 4.35 0 0 1 19.8 9.8C19.8 16.45 12 21 12 21Z" />
+                </svg>
+                <span>{issue.likes}</span>
+              </button>
+            </div>
 
-          <p className="supportDetailDescription">{issue.description}</p>
+            <p className="supportDetailDescription">{issue.description}</p>
 
-          <div className="supportDetailMeta">
-            <span>{issue.publishedAgo}</span>
-            <span>par {issue.authorName}</span>
-          </div>
+            <div className="supportDetailMeta">
+              <span>{issue.publishedAgo}</span>
+              <span>par {issue.authorName}</span>
+            </div>
 
-          <div className="supportDetailSeparator" />
+            <div className="supportDetailSeparator" />
 
-          <div className="supportCommentList" aria-label="Commentaires">
-            {issue.comments.map((comment) => (
-              <article className="supportComment" key={comment.id}>
-                <header className="supportCommentHeader">
-                  <div className="supportCommentAuthor">
-                    <span className="supportCommentAvatar" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" focusable="false">
-                        <path d="M12 12.5c1.35 0 2.45-1.1 2.45-2.45S13.35 7.6 12 7.6 9.55 8.7 9.55 10.05s1.1 2.45 2.45 2.45Z" />
-                        <path d="M7.8 17.7c.35-2.15 2.02-3.52 4.2-3.52s3.85 1.37 4.2 3.52H7.8Z" />
-                      </svg>
-                    </span>
-                    <span>{comment.authorName}</span>
-                  </div>
-                  <span className="supportCommentDate">{comment.publishedAgo}</span>
-                </header>
-                <p>{comment.body}</p>
-              </article>
-            ))}
-          </div>
-        </article>
+            <div className="supportCommentList" aria-label="Commentaires">
+              {issue.comments.map((comment) => (
+                <article className="supportComment" key={comment.id}>
+                  <header className="supportCommentHeader">
+                    <div className="supportCommentAuthor">
+                      <span className="supportCommentAvatar" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                          <path d="M12 12.5c1.35 0 2.45-1.1 2.45-2.45S13.35 7.6 12 7.6 9.55 8.7 9.55 10.05s1.1 2.45 2.45 2.45Z" />
+                          <path d="M7.8 17.7c.35-2.15 2.02-3.52 4.2-3.52s3.85 1.37 4.2 3.52H7.8Z" />
+                        </svg>
+                      </span>
+                      <span>{comment.authorName}</span>
+                    </div>
+                    <span className="supportCommentDate">{comment.publishedAgo}</span>
+                  </header>
+                  <p>{comment.body}</p>
+                </article>
+              ))}
+            </div>
+          </article>
+        </SquircleBox>
 
         {isCommentFormVisible && (
           <form className="supportInlineCommentForm" onSubmit={handleCommentSubmit}>
-            <textarea
-              placeholder="Ton commentaire"
-              rows={4}
-              value={commentBody}
-              onChange={(event) => setCommentBody(event.target.value)}
-              required
-            />
-            <button className="supportSubmitButton" type="submit" disabled={isSubmittingComment}>
-              {isSubmittingComment ? 'Ajout...' : 'Publier'}
-            </button>
+            <SquircleBox asChild cornerRadius={21}>
+              <textarea
+                placeholder="Ton commentaire"
+                rows={4}
+                value={commentBody}
+                onChange={(event) => setCommentBody(event.target.value)}
+                required
+              />
+            </SquircleBox>
+            <SquircleBox asChild cornerRadius={21}>
+              <button className="supportSubmitButton" type="submit" disabled={isSubmittingComment}>
+                {isSubmittingComment ? 'Ajout...' : 'Publier'}
+              </button>
+            </SquircleBox>
           </form>
         )}
 
-        <button className="supportCommentButton" type="button" onClick={() => setIsCommentFormVisible(true)}>
-          Ajouter un commentaire
-        </button>
+        <SquircleBox asChild cornerRadius={18}>
+          <button className="supportCommentButton" type="button" onClick={() => setIsCommentFormVisible(true)}>
+            Ajouter un commentaire
+          </button>
+        </SquircleBox>
         {message && <p className="supportNotice">{message}</p>}
       </section>
     </main>

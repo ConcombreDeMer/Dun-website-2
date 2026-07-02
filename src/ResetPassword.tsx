@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import resetPasswordIllustration from './assets/reset-password/7.png';
+import { SquircleBox } from './components/SquircleBox';
 import { isSupabaseConfigured, supabase } from './lib/supabase';
 
 export function ResetPasswordPage() {
@@ -158,59 +159,71 @@ export function ResetPasswordPage() {
         </header>
 
         {!isSupabaseConfigured ? (
-          <p className="resetPasswordMessage resetPasswordMessageError">
-            La connexion Supabase n'est pas configurée.
-          </p>
+          <SquircleBox asChild cornerRadius={18}>
+            <p className="resetPasswordMessage resetPasswordMessageError">
+              La connexion Supabase n'est pas configurée.
+            </p>
+          </SquircleBox>
         ) : null}
 
         <form className="resetPasswordForm" onSubmit={handleResetPassword}>
           <label className="resetPasswordField" htmlFor="password">
             <span>Nouveau mot de passe</span>
-            <input
-              id="password"
-              autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isLoading}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="Votre nouveau mot de passe"
-              required
-              type="password"
-              value={password}
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <input
+                id="password"
+                autoComplete="new-password"
+                disabled={!isSupabaseConfigured || isLoading}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="Votre nouveau mot de passe"
+                required
+                type="password"
+                value={password}
+              />
+            </SquircleBox>
           </label>
 
           <label className="resetPasswordField" htmlFor="confirmPassword">
             <span>Confirmer le mot de passe</span>
-            <input
-              id="confirmPassword"
-              autoComplete="new-password"
-              disabled={!isSupabaseConfigured || isLoading}
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              placeholder="Confirmez le mot de passe"
-              required
-              type="password"
-              value={confirmPassword}
-            />
+            <SquircleBox asChild cornerRadius={21}>
+              <input
+                id="confirmPassword"
+                autoComplete="new-password"
+                disabled={!isSupabaseConfigured || isLoading}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder="Confirmez le mot de passe"
+                required
+                type="password"
+                value={confirmPassword}
+              />
+            </SquircleBox>
           </label>
 
           {errorMessage ? (
-            <p className="resetPasswordMessage resetPasswordMessageError" role="alert">
-              {errorMessage}
-            </p>
+            <SquircleBox asChild cornerRadius={18}>
+              <p className="resetPasswordMessage resetPasswordMessageError" role="alert">
+                {errorMessage}
+              </p>
+            </SquircleBox>
           ) : null}
 
           {successMessage ? (
-            <p className="resetPasswordMessage resetPasswordMessageSuccess" role="status">
-              {successMessage}
-            </p>
+            <SquircleBox asChild cornerRadius={18}>
+              <p className="resetPasswordMessage resetPasswordMessageSuccess" role="status">
+                {successMessage}
+              </p>
+            </SquircleBox>
           ) : null}
 
-          <button
-            className="resetPasswordSubmit"
-            disabled={!isSupabaseConfigured || isLoading}
-            type="submit"
-          >
-            {isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
-          </button>
+          <SquircleBox asChild cornerRadius={20}>
+            <button
+              className="resetPasswordSubmit"
+              disabled={!isSupabaseConfigured || isLoading}
+              type="submit"
+            >
+              {isLoading ? 'Mise à jour...' : 'Réinitialiser mon mot de passe'}
+            </button>
+          </SquircleBox>
         </form>
       </section>
     </main>

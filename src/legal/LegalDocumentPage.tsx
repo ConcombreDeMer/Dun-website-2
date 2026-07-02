@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react';
 import { SiteFooter } from '../components/SiteFooter';
+import { SquircleBox } from '../components/SquircleBox';
 import './legal.css';
 
 type LegalDocumentPageProps = {
@@ -40,7 +41,9 @@ export function LegalDocumentPage({ eyebrow, markdown, title }: LegalDocumentPag
           {updatedAt && <p className="legalUpdated">{updatedAt}</p>}
         </header>
 
-        <div className="legalContent">{renderLegalMarkdown(content)}</div>
+        <SquircleBox asChild cornerRadius={24}>
+          <div className="legalContent">{renderLegalMarkdown(content)}</div>
+        </SquircleBox>
       </article>
       <SiteFooter className="siteFooterInline" />
     </main>
@@ -127,26 +130,28 @@ function renderLegalMarkdown(markdown: string) {
       const [head = [], ...body] = tableRows;
 
       blocks.push(
-        <div className="legalTableWrap" key={index}>
-          <table>
-            <thead>
-              <tr>
-                {head.map((cell) => (
-                  <th key={cell}>{renderInlineMarkdown(cell)}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {body.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {row.map((cell, cellIndex) => (
-                    <td key={`${cell}-${cellIndex}`}>{renderInlineMarkdown(cell)}</td>
+        <SquircleBox asChild cornerRadius={18} key={index}>
+          <div className="legalTableWrap">
+            <table>
+              <thead>
+                <tr>
+                  {head.map((cell) => (
+                    <th key={cell}>{renderInlineMarkdown(cell)}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>,
+              </thead>
+              <tbody>
+                {body.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {row.map((cell, cellIndex) => (
+                      <td key={`${cell}-${cellIndex}`}>{renderInlineMarkdown(cell)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </SquircleBox>,
       );
       continue;
     }
